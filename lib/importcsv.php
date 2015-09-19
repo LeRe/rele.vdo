@@ -6,7 +6,7 @@ use Rele\Vdo\UsedPartsTable;
 
 class ImportCSV 
 {
-	private static $workFolder = '/upload/';
+	private static $workFolder = '/upload/';  //TODO Вынести в настройки модуля
 	private static $fullPath2Folder = '';
 	private static $orderFileName = ''; //vdo_orders.csv
 	private static $usedPartsFileName = ''; //vdo_used_parts.csv
