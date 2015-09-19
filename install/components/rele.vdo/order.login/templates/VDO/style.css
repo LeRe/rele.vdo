@@ -1,0 +1,13 @@
+.vdo-orderlogin {}
+
+.vdo-orderlogin-number {
+	float: left;
+	margin: 0px 10px 5px;
+}
+			
+.vdo-orderlogin-customer {
+	float: left;
+	margin: 0px 10px 5px;
+}
+
+.vdo-orderlogin-submit {}
