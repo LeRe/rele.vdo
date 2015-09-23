@@ -39,19 +39,28 @@ class rele_vdo extends CModule
 
     function DoInstall()
     {
-        global $DOCUMENT_ROOT, $APPLICATION;        
-        ModuleManager::registerModule($this->MODULE_ID);
-      
-        $this->InstallDB();
-        $this->InstallFiles();
-        
-        CAgent::AddAgent(
-            'Rele\Vdo\ImportCSV::loadData();', 
-            $this->MODULE_ID, 
-            "N", 
-            300 
+        global $DOCUMENT_ROOT, $APPLICATION, $step;
+
+        $step = IntVal($step);
+        if($step < 2) 
+        {
+            $APPLICATION->IncludeAdminFile(GetMessage('VDO_INSTALL_TITLE'), $DOCUMENT_ROOT."/bitrix/modules/rele.vdo/install/step1.php");
+        }
+        elseif($step == 2)
+        {
+            ModuleManager::registerModule($this->MODULE_ID);
+
+            $installSampleData = isset($_REQUEST['sampledata']) && $_REQUEST['sampledata'] == 'Y';
+            $this->InstallDB($installSampleData);            
+            $this->InstallFiles();
+            CAgent::AddAgent(
+                'Rele\Vdo\ImportCSV::loadData();', 
+                $this->MODULE_ID, 
+                "N", 
+                300 
             );
-        $APPLICATION->IncludeAdminFile(GetMessage("VDO_INSTALL_TITLE"), $DOCUMENT_ROOT."/bitrix/modules/rele.vdo/install/step.php");    
+            $APPLICATION->IncludeAdminFile(GetMessage("VDO_INSTALL_TITLE"), $DOCUMENT_ROOT."/bitrix/modules/rele.vdo/install/step2.php");
+        }
     }
 
     function DoUninstall()
@@ -85,18 +94,26 @@ class rele_vdo extends CModule
         }        
     }
 
-    function InstallDB()
+    function InstallDB($installSample)
     {
         if(Loader::includeModule($this->MODULE_ID))
         {
-            //TODO add option for sample data install
-            if(!OrderTable::isTableExists()){
+            if(!OrderTable::isTableExists())
+            {
                 OrderTable::createTable();
-                OrderTable::addSampleData();
             }
-            if(!UsedPartsTable::isTableExists()){
+            if(!UsedPartsTable::isTableExists())
+            {
                 UsedPartsTable::createTable();
-                UsedPartsTable::addSampleData();
+            }
+
+            if($installSample)
+            {
+                if(OrderTable::getCount() == 0 and UsedPartsTable::getCount() == 0)
+                {
+                    OrderTable::addSampleData();
+                    UsedPartsTable::addSampleData();
+                }
             }
         }
         return true;        

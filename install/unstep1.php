@@ -1,3 +1,5 @@
+<?IncludeModuleLangFile(__FILE__);?>
+
 <form action="<?echo $APPLICATION->GetCurPage()?>">
 	<?=bitrix_sessid_post()?>
 	<input type="hidden" name="lang" value="<?=LANGUAGE_ID?>">
