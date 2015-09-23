@@ -13,6 +13,9 @@
 ?>
 <?CUtil::InitJSCore(Array('ajax','popup'));?>
 
+<div id="vdo-orderLogin-popup" style="display:none;">
+</div>
+
 <script type="text/javascript">
 	BX.message(
 		{
@@ -23,17 +26,15 @@
 	vdo.componentPath = '<?=$arResult['COMPONENT_PATH']?>';
 </script>
 
-<div class="vdo-orderlogin">
+<div class="vdo-orderLogin">
 	<form name="vdoOrderLoginForm" action="<?=$arResult['PATH']?>">
-		<div class="vdo-orderlogin-number">
+		<div class="vdo-orderLogin-number">
 			<?=GetMessage('VDO_ORDER_NUMBER')?> <input size="5" maxlength="5" pattern="\d{1,5}" name="vdonumber" type="text">
 		</div>
-		<div class="vdo-orderlogin-customer">
+		<div class="vdo-orderLogin-customer">
 			<?=GetMessage('VDO_CUSTOMER')?> <input size="20" maxlength="50" name="vdocustomer" type="text">
 		</div>
-		<div class="vdo-orderlogin-submit">
-			<input  value="<?=GetMessage('VDO_CHECK')?>" type="button" onclick="vdo.buttonHandler();">
-		</div>
+		<input  value="<?=GetMessage('VDO_CHECK')?>" type="button" onclick="vdo.buttonHandler();">
 	</form>
 </div>
 <br>

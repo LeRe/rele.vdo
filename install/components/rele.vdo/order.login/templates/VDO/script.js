@@ -8,10 +8,10 @@ var vdo = (function(){
 				var vdonumber = document.getElementsByName('vdonumber')[0].value;
 				var vdocustomer = document.getElementsByName('vdocustomer')[0].value;
 				var popup = new BX.PopupWindow(
-						'vdoPopupMessage',
+						'vdo-orderLogin-popupMessage',
 						document.vdoOrderLoginForm, {
 							autoHide : true,
-							offsetTop : 25,
+							offsetTop : 10,
 							//offsetRight : 50,
 							lightShadow : true,
 							closeIcon : false,
@@ -37,9 +37,7 @@ var vdo = (function(){
 							var data = JSON.parse(data);
 							if(!data.orderExist)
 							{
-								popup.setContent('<div style="margin: 10px">'+
-									BX.message('JS_VDO_ORDER_NOT_FOUND')+
-									'</div>');
+								popup.setContent(BX('vdo-orderLogin-popup').innerHTML = BX.message('JS_VDO_ORDER_NOT_FOUND'));
 								popup.show();								
 							}
 							else
@@ -51,16 +49,9 @@ var vdo = (function(){
 				}
 				else 
 				{
-					popup.setContent('<div style="margin: 10px">'+
-						BX.message('JS_VDO_NOT_ENOUGH_DATA')+
-						'</div>');
+					popup.setContent(BX('vdo-orderLogin-popup').innerHTML = BX.message('JS_VDO_NOT_ENOUGH_DATA'));
 					popup.show();
 				}				
 			}
 	}
 })();
-
-
-
-
-

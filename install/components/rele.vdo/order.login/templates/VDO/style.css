@@ -1,13 +1,19 @@
-.vdo-orderlogin {}
+.vdo-orderLogin {}
 
-.vdo-orderlogin-number {
+.vdo-orderLogin-number {
 	float: left;
 	margin: 0px 10px 5px;
 }
 			
-.vdo-orderlogin-customer {
+.vdo-orderLogin-customer {
 	float: left;
 	margin: 0px 10px 5px;
 }
 
-.vdo-orderlogin-submit {}
+.popup-window {
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+.popup-window-content {
+	padding:20px;
+}

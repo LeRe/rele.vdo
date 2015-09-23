@@ -19,7 +19,6 @@ if(isset( $_REQUEST['vdonumber']) && isset($_REQUEST['vdocustomer']) ) {
 	if($orderNumber == '' || $orderCustomer == '' )
 	{
 		//Input parameters must have a value
-		//TODO Переделать через arResult и шаблон, добавить в order.login javascript проверку заполнения полей
 		$arResult['ERROR'] = GetMessage('VDO_NECESSARY_NUMBER_CUSTOMER');
 	}
 	else
