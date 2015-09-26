@@ -3,10 +3,10 @@ namespace Rele\Vdo;
 use Bitrix\Main\HttpApplication;
 use Rele\Vdo\OrderTable;
 use Rele\Vdo\UsedPartsTable;
+use Rele\Vdo\Options;
 
 class ImportCSV 
 {
-	private static $workFolder = '/upload/';  //TODO Вынести в настройки модуля
 	private static $fullPath2Folder = '';
 	private static $orderFileName = ''; //vdo_orders.csv
 	private static $usedPartsFileName = ''; //vdo_used_parts.csv
@@ -42,7 +42,7 @@ class ImportCSV
 	{
 		if(self::$fullPath2Folder === '')
 		{
-			self::$fullPath2Folder = $_SERVER['DOCUMENT_ROOT'].self::$workFolder;	
+			self::$fullPath2Folder = $_SERVER['DOCUMENT_ROOT'].Options::getOrderWorkFolder();	
 		}
 		$isAllGood = true;
 	
@@ -68,7 +68,7 @@ class ImportCSV
 	{
 		if(self::$fullPath2Folder === '')
 		{
-			self::$fullPath2Folder = $_SERVER['DOCUMENT_ROOT'].self::$workFolder;
+			self::$fullPath2Folder = $_SERVER['DOCUMENT_ROOT'].Options::getOrderWorkFolder();
 		}
 		
 		$arFilesInFolder = scandir(self::$fullPath2Folder);
@@ -123,7 +123,7 @@ class ImportCSV
 	{
 		if(self::$fullPath2Folder === '')
 		{
-			self::$fullPath2Folder = $_SERVER['DOCUMENT_ROOT'].self::$workFolder;
+			self::$fullPath2Folder = $_SERVER['DOCUMENT_ROOT'].Options::getOrderWorkFolder();
 		}
 		setlocale(LC_ALL, 'ru_RU.utf8');
 
@@ -133,7 +133,14 @@ class ImportCSV
 			self::clearTable(new UsedPartsTable);
 
 			$handle = fopen('php://memory','w+');
-			fwrite($handle, iconv('CP1251', 'UTF-8', file_get_contents(self::$fullPath2Folder.self::$orderFileName)));
+			if(Options::isOrderEncodingEnable()) 
+			{
+				fwrite($handle, iconv('CP1251', 'UTF-8', file_get_contents(self::$fullPath2Folder.self::$orderFileName)));
+			}
+			else
+			{
+				fwrite($handle, file_get_contents(self::$fullPath2Folder.self::$orderFileName));
+			}			
 			rewind($handle);		
 			while(($data = fgetcsv($handle)) !== false)
 			{
@@ -155,9 +162,15 @@ class ImportCSV
 			}
 			fclose($handle);
 	
-			//TODO make the option in the settings module for reencoding
 			$handle = fopen('php://memory','w+');
-			fwrite($handle, iconv('CP1251', 'UTF-8', file_get_contents(self::$fullPath2Folder.self::$usedPartsFileName)));
+			if(Options::isOrderEncodingEnable()) 
+			{
+				fwrite($handle, iconv('CP1251', 'UTF-8', file_get_contents(self::$fullPath2Folder.self::$usedPartsFileName)));
+			}
+			else
+			{
+				fwrite($handle, file_get_contents(self::$fullPath2Folder.self::$usedPartsFileName));
+			}
 			rewind($handle);			
 			while(($data = fgetcsv($handle)) !== false)
 			{

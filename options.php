@@ -21,16 +21,17 @@ Loc::loadMessages(__FILE__);
 
 $arAllOptions = array(
 	array("vat_included_default", GetMessage("VDO_VAT_INCLUDED_DEFAULT"), array("checkbox")),
+	array("importcsv_work_folder_default", GetMessage("VDO_IMPORTCSV_WORKFOLDER_DEFAULT"), array("text",25)),
+	array("importcsv_cp1251_utf8_encoding_default", GetMessage("VDO_IMPORTCSV_CP1251_UTF8_ENCODING_DEFAULT"), array("checkbox")),
 );
 
 $tabControl = new CAdminTabControl("tabControl", array(
-		array(
-				"DIV" => "edit1",
-				"TAB" => Loc::getMessage("VDO_TAB_SETTINGS"), 
-				"TITLE" => Loc::getMessage("VDO_TAB_TITLE_SETTINGS"),
-			),
-	));
-
+					array(
+						"DIV" => "edit1",
+						"TAB" => Loc::getMessage("VDO_TAB_SETTINGS"), 
+						"TITLE" => Loc::getMessage("VDO_TAB_TITLE_SETTINGS"),
+					),
+				));
 
 CModule::IncludeModule(ADMIN_MODULE_NAME);
 

@@ -28,8 +28,8 @@ class rele_vdo extends CModule
     public function __construct()
     {
         $this->MODULE_ID = 'rele.vdo';
-        $this->MODULE_VERSION = '0.0.1';
-        $this->MODULE_VERSION_DATE = '2015-05-29 11:00:00';
+        $this->MODULE_VERSION = '0.0.2';
+        $this->MODULE_VERSION_DATE = '2015-09-26 19:09:00';
         $this->MODULE_NAME = Loc::getMessage('VDO_MODULE_NAME');
         $this->MODULE_DESCRIPTION = Loc::getMessage('VDO_MODULE_DESCRIPTION');
         $this->MODULE_GROUP_RIGHTS = 'N';
