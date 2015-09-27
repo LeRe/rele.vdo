@@ -200,7 +200,7 @@ class ImportCSV
 		return 'Rele\Vdo\ImportCSV::loadData();';
 	}
 
-	static function clearTable($oTable)
+	static public function clearTable($oTable)
 	{
 		if($oTable::isTableExists())
 		{

@@ -133,13 +133,17 @@ class rele_vdo extends CModule
     {
         global $DOCUMENT_ROOT;
         CopyDirFiles($DOCUMENT_ROOT."/bitrix/modules/rele.vdo/install/components",
-                        $DOCUMENT_ROOT."/bitrix/components", true, true);
+            $DOCUMENT_ROOT."/bitrix/components", true, true);
+        CopyDirFiles($DOCUMENT_ROOT."/bitrix/modules/rele.vdo/install/admin", 
+            $DOCUMENT_ROOT."/bitrix/admin", true);
         return true;
     }
 
     function UnInstallFiles()
     {
+        global $DOCUMENT_ROOT;
         DeleteDirFilesEx("/bitrix/components/rele.vdo");
+        DeleteDirFiles($DOCUMENT_ROOT."/bitrix/modules/rele.vdo/install/admin", $DOCUMENT_ROOT."/bitrix/admin");
         return true;
     }
 }
