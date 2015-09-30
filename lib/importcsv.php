@@ -1,23 +1,47 @@
 <?
 namespace Rele\Vdo;
-use Bitrix\Main\HttpApplication;
 use Rele\Vdo\OrderTable;
 use Rele\Vdo\UsedPartsTable;
 use Rele\Vdo\Options;
 
+/**
+* ImportCSV - обеспечивает загрузку данных заказ-нарядов в таблицы модуля.
+*
+*/
 class ImportCSV 
 {
+	/** @var string $fullPath2Folder Содержит полный путь к папке содержащей импортируемые файлы */
 	private static $fullPath2Folder = '';
-	private static $orderFileName = ''; //vdo_orders.csv
-	private static $usedPartsFileName = ''; //vdo_used_parts.csv
+
+	/** @var string $orderFileName	 Содержит имя файла с данными по заказ-нарядам */
+	private static $orderFileName = '';
+
+	/** @var string $usedPartsFileName	Содержит имя файла с данными по использованным запчастям */
+	private static $usedPartsFileName = '';
+
+	/** @var array  $listForDelete		Содержит список файлов подлежащих удалению после импортирования данных */
 	private static $listForDelete = array();
+
+    /** @var array  $orderFields		Содержит название полей для файла содержащего данные по заказ-нарядам */
 	private static $orderFields = array('ORDER_NUMBER', 'ORDER_DATE', 'READY_DATE', 
 										'OUT_DATE', 'CUSTOMER_ALERT', 'EQUIPMENT', 
 										'REASON', 'ENGINEER', 'CUSTOMER');
+
+	/** @var array  $usedPartsFields	Содержит название полей для файла содержащего данные по использованным запчастям */
 	private static $usedPartsFields = array(
 											'ORDER_NUMBER', 'POSITION_NUMBER', 'NOMENCLATURE', 
 											'AMOUNT', 'COST', 'SUM', 'VAT');
-	
+
+	/**
+	* Проверяет заголовки CSV.
+	*
+	* Осуществляет проверку заголовков CSV в файле на предмет соответствия заданным заголовкам.
+	*   
+	* @param string $fileName Имя файла подлежащего проверке
+	* @param array $fields Массив содержащий поля, наличие которых необходимо проверить в файле $fileName
+	*
+	* @return boolean Возвращает true если заголовок файла совпадает с заданными параметрами, иначе false
+	*/
 	private static function checkCsvHeader($fileName, $fields)
 	{
 		$result = true; 
@@ -38,6 +62,16 @@ class ImportCSV
 		return $result;
 	}
 
+	/**
+	* Проверяет файлы.
+	*
+	* Осуществляет проверку файлов заданных в свойствах класса $orderFileName и $usedPartsFileName.
+	* Проверяется наличие файлов на диске и соответствие заголовков. 
+	*
+	* @deprecated В данный момент не используется, фунционал метода реализован в ImportCSV::findFiles()
+	*
+	* @return boolean Возвращает true в случае если файлы удовлетворяют условиям, иначе false
+	*/
 	private static function checkFiles()
 	{
 		if(self::$fullPath2Folder === '')
@@ -48,14 +82,13 @@ class ImportCSV
 	
 		if(file_exists(self::$fullPath2Folder.self::$orderFileName) && 
 			file_exists(self::$fullPath2Folder.self::$usedPartsFileName)) {
-
-			$isAllGood = self::checkCsvHeader(self::$fullPath2Folder.self::$orderFileName, 
-				self::$orderFields);
-			if($isAllGood)
-			{
-				$isAllGood = self::checkCsvHeader(self::$fullPath2Folder.self::$usedPartsFileName, 
-					self::$usedPartsFields);
-			}
+				$isAllGood = self::checkCsvHeader(self::$fullPath2Folder.self::$orderFileName, 
+					self::$orderFields);
+				if($isAllGood)
+				{
+					$isAllGood = self::checkCsvHeader(self::$fullPath2Folder.self::$usedPartsFileName, 
+						self::$usedPartsFields);
+				}
 		}
 		else 
 		{
@@ -64,6 +97,15 @@ class ImportCSV
 		return $isAllGood;				
 	}
 
+	/**
+	* Ищет файлы с данными для импорта.
+	*
+	* Из настроек модуля определяет папку предназначенную для импорта файлов. 
+	* Ищет файлы с данными в заданной папке. При поиске файлы отбираются предварительно по расширению. 
+	* Далее файлы проверяются на соответствие заголовку.
+	*
+	* @return boolean Возвращает true в случае успешного определения имен файлов, иначе false
+	*/
 	public static function findFiles() 
 	{
 		if(self::$fullPath2Folder === '')
@@ -113,12 +155,19 @@ class ImportCSV
 		{
 			return true;
 		}
-		else 
-		{
-			return false;
-		}
+
+		return false;
 	}
 
+	/**
+	* Загружает данные в таблицы модуля.
+	*
+	* В соответствии с настройками модуля при загрузке может производиться перекодировка даннх из CP1251 в UTF-8.
+	* В случае успешной загрузки данных файлы удаляются.
+	*
+	* @return string Возвращает строку содержащую PHP код, который будет использован при следующем запуске данной функции.
+	*		  Подразумевается использование данного метода в качестве агента Bitrix. 
+	*/
 	static function loadData()
 	{
 		if(self::$fullPath2Folder === '')
@@ -129,8 +178,8 @@ class ImportCSV
 
 		if(self::findFiles())
 		{
-			self::clearTable(new OrderTable);
-			self::clearTable(new UsedPartsTable);
+			OrderTable::clearTable();
+			UsedPartsTable::clearTable();
 
 			$handle = fopen('php://memory','w+');
 			if(Options::isOrderEncodingEnable()) 
@@ -198,13 +247,5 @@ class ImportCSV
 			}
 		}
 		return 'Rele\Vdo\ImportCSV::loadData();';
-	}
-
-	static public function clearTable($oTable)
-	{
-		if($oTable::isTableExists())
-		{
-			HttpApplication::getConnection()->query("delete from ".$oTable::getTableName());
-		}
 	}
 }

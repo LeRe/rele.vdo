@@ -18,6 +18,14 @@ abstract class TableUtils extends Entity\DataManager
 		return self::isTableExists();
 	}
 
+	static public function clearTable()
+	{
+		if(self::isTableExists())
+		{
+			HttpApplication::getConnection()->query("delete from ".static::getTableName());
+		}
+	}
+
 	public static function dropTable()
 	{	
 		if(self::isTableExists())

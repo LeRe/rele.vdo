@@ -22,8 +22,8 @@ if(Main\Loader::includeModule('rele.vdo'))
 	{
 			switch ($_REQUEST['vdo_action']) {
 				case 'clear':
-					ImportCSV::clearTable(new OrderTable);
-					ImportCSV::clearTable(new UsedPartsTable);
+					OrderTable::clearTable();
+					UsedPartsTable::clearTable();
 					$actionReply = Loc::getMessage('VDO_TABLE_CLEAR');
 					break;
 				case 'load':
