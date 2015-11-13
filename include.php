@@ -1,5 +1,5 @@
 <?
-defined('B_PROLOG_INCLUDED') and (B_PROLOG_INCLUDED === true) or die();
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 //IncludeModuleLangFile(__FILE__);
 //global $APPLICATION, $DBType;
 /*

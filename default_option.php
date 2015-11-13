@@ -1,5 +1,5 @@
 <?php
-defined('B_PROLOG_INCLUDED') and (B_PROLOG_INCLUDED === true) or die();
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
 $rele_vdo_default_option = array(
 	'vat_included_default' 			=> 'N',

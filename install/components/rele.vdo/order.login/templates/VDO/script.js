@@ -1,9 +1,9 @@
-var vdo = (function(){
+var vdo = (function(){	
 	return {
 		componentPath: '',
 		buttonHandler:
-			function() 
-			{
+			function(listener) 
+			{				
 				var path = this.componentPath + '/ajax/check.php';
 				var vdonumber = document.getElementsByName('vdonumber')[0].value;
 				var vdocustomer = document.getElementsByName('vdocustomer')[0].value;
@@ -14,7 +14,7 @@ var vdo = (function(){
 							offsetTop : 10,
 							//offsetRight : 50,
 							lightShadow : true,
-							closeIcon : false,
+							closeIcon : true,
 							closeByEsc : true,
 							overlay: {
 								backgroundColor: 'gray',
@@ -22,10 +22,13 @@ var vdo = (function(){
 							},
 							events: { 
 								onPopupClose : function(popupWindow){
-										popupWindow.destroy(); 
+										popupWindow.destroy();
+										BX.bind(BX("vdo-orderLogin-submit"), "click", listener);
 								} 
 							}
-						});				
+						});
+
+				BX.unbind(BX("vdo-orderLogin-submit"), "click", listener);
 
 				if(vdonumber != '' && vdocustomer !='') 
 				{

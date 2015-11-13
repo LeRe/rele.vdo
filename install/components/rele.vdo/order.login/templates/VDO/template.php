@@ -23,7 +23,21 @@
 			JS_VDO_ORDER_NOT_FOUND: '<?=GetMessageJS('VDO_ORDER_NOT_FOUND');?>',
 		}
 	);
-	vdo.componentPath = '<?=$arResult['COMPONENT_PATH']?>';
+	BX.ready(
+		function(){
+			vdo.componentPath = '<?=$arResult['COMPONENT_PATH']?>';
+			var listenerVdoLoginForm = function(event)
+					{
+						vdo.buttonHandler(listenerVdoLoginForm);
+					};
+			BX.bind(BX("vdo-orderLogin-submit"), "click", 
+				function(event)
+				{
+					event.preventDefault();
+				}
+			);	
+			BX.bind(BX("vdo-orderLogin-submit"), "click", listenerVdoLoginForm);	
+		});
 </script>
 
 <div class="vdo-orderLogin">
@@ -34,7 +48,7 @@
 		<div class="vdo-orderLogin-customer">
 			<?=GetMessage('VDO_CUSTOMER')?> <input size="20" maxlength="50" name="vdocustomer" type="text">
 		</div>
-		<input  value="<?=GetMessage('VDO_CHECK')?>" type="button" onclick="vdo.buttonHandler();">
+		<input  value="<?=GetMessage('VDO_CHECK')?>" type="submit" id="vdo-orderLogin-submit">
 	</form>
 </div>
 <br>

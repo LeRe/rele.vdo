@@ -1,5 +1,6 @@
 <?
-defined('B_PROLOG_INCLUDED') and (B_PROLOG_INCLUDED === true) or die();
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
+
 defined('ADMIN_MODULE_NAME') or define('ADMIN_MODULE_NAME', 'rele.vdo');
 
 use Bitrix\Main\Application;
